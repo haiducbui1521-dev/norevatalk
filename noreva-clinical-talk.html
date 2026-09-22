@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Noreva Clinical Talk #01 — Giải mã công thức hiệp đồng đa tác động</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#152119; --forest:#1F3A2E; --leaf:#4C8C5B; --leaf-dark:#3B7048;
+  --mint:#EAF3EA; --mint-2:#DCEBDD; --cream:#FBFBF8; --line:#D8E4D9;
+  --clay:#E7B7A6; --gold:#C9A24B;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth;}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5;}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;margin:0;color:var(--forest);}
+p{margin:0;}
+img,svg{max-width:100%;display:block;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+a{color:inherit;}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--leaf);color:#fff;border:none;
+  padding:14px 26px;border-radius:100px;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;
+  transition:background .2s ease, transform .2s ease;}
+.btn:hover{background:var(--leaf-dark);transform:translateY(-1px);}
+.btn.ghost{background:transparent;border:1.5px solid var(--forest);color:var(--forest);}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(251,251,248,.92);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;}
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--forest);letter-spacing:.5px;}
+.nav-links{display:flex;gap:32px;font-size:15px;color:var(--forest);}
+.nav-links a{text-decoration:none;}
+@media (max-width:720px){.nav-links{display:none;}}
+
+/* section numbering rail */
+.sec{padding:88px 0;}
+.sec-head{display:flex;align-items:flex-start;gap:18px;margin-bottom:44px;}
+.num{font-family:'Fraunces',serif;font-size:15px;color:var(--leaf-dark);border:1px solid var(--leaf-dark);
+  border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sec-head h2{font-size:clamp(24px,3vw,32px);}
+.alt{background:var(--mint);}
+
+/* hero */
+.hero{padding:64px 0 88px;position:relative;overflow:hidden;background:linear-gradient(180deg,#fff, var(--mint) 120%);}
+.hero-tag{color:var(--leaf-dark);font-weight:600;font-size:14px;letter-spacing:.3px;margin-bottom:14px;}
+.hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center;}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+.hero h1{font-size:clamp(32px,4.6vw,52px);line-height:1.08;margin-bottom:18px;}
+.hero-sub{color:#4A5A50;font-size:17px;max-width:46ch;margin-bottom:22px;}
+.badge{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:100px;padding:8px 18px;
+  font-size:14px;font-weight:600;color:var(--forest);margin-bottom:22px;}
+.meta-row{display:flex;flex-wrap:wrap;gap:22px;margin-bottom:28px;font-size:14.5px;color:#3C4A41;}
+.meta-row span{display:flex;align-items:center;gap:7px;}
+.hero-visual{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:0;}
+.speaker-photo{width:230px;height:280px;border-radius:18px;object-fit:cover;background:linear-gradient(160deg,#DCEBDD,#B8D6BE);
+  display:flex;align-items:center;justify-content:center;color:var(--forest);font-family:'Fraunces',serif;font-size:15px;text-align:center;padding:16px;}
+.tube{width:74px;height:190px;border-radius:14px 14px 8px 8px;background:linear-gradient(180deg,#fff,#EEF5EE);
+  border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:10px 6px;
+  font-size:10px;color:var(--forest);text-align:center;font-weight:600;position:relative;box-shadow:0 12px 24px rgba(31,58,46,.08);}
+.tube::before{content:'';position:absolute;top:-10px;width:26px;height:14px;background:#fff;border:1px solid var(--line);border-radius:4px 4px 0 0;}
+.products{display:flex;align-items:flex-end;gap:14px;}
+.pump{width:52px;height:210px;border-radius:10px;background:linear-gradient(180deg,#F4F9F4,#E1EFE2);border:1px solid var(--line);}
+
+/* skin cards */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media (max-width:820px){.grid-3{grid-template-columns:1fr;}}
+.skin-card{border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);}
+.skin-photo{height:150px;background:radial-gradient(circle at 30% 30%,var(--clay),#F2D8CC 70%);}
+.skin-card .body{padding:20px 22px 24px;}
+.skin-card h3{font-size:17px;margin-bottom:6px;color:var(--forest);font-family:'Inter',sans-serif;font-weight:600;}
+.skin-card p{font-size:14px;color:#5C6A61;}
+
+/* steps */
+.step-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px;}
+.step-num{font-family:'Fraunces',serif;font-size:26px;color:var(--leaf);margin-bottom:10px;}
+.step-card h3{font-size:16px;margin-bottom:6px;font-family:'Inter',sans-serif;font-weight:600;color:var(--forest);}
+.step-card p{font-size:14px;color:#5C6A61;}
+
+/* benefits */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+.benefit{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 20px;}
+.benefit .ic{width:38px;height:38px;border-radius:10px;background:var(--mint-2);color:var(--leaf-dark);
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px;}
+.benefit h3{font-size:15px;margin-bottom:6px;font-family:'Inter',sans-serif;font-weight:600;color:var(--forest);}
+.benefit p{font-size:13.5px;color:#5C6A61;}
+
+/* speaker feature */
+.speaker-feat{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:center;}
+@media (max-width:820px){.speaker-feat{grid-template-columns:1fr;}}
+.speaker-big{width:100%;aspect-ratio:4/5;border-radius:20px;background:linear-gradient(160deg,#DCEBDD,#B8D6BE);}
+.speaker-feat .kicker{color:var(--leaf-dark);font-weight:600;font-size:13.5px;margin-bottom:10px;}
+.speaker-feat h2{font-size:clamp(24px,3vw,34px);margin-bottom:6px;}
+.speaker-feat .role{color:#4A5A50;font-size:15px;}
+
+/* content list + info card */
+.split{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;}
+@media (max-width:820px){.split{grid-template-columns:1fr;}}
+.content-list{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+.content-list .row{display:flex;align-items:center;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);font-size:15px;font-weight:500;}
+.content-list .row:last-child{border-bottom:none;}
+.content-list .row .n{color:var(--leaf-dark);font-family:'Fraunces',serif;}
+.info-card{background:var(--forest);color:#fff;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:14px;justify-content:center;}
+.info-card h3{color:#fff;font-size:22px;}
+.info-card p{color:#CFE0D2;font-size:14px;}
+
+/* ingredients */
+.ingredient-hero{display:grid;grid-template-columns:.7fr 2fr;gap:16px;}
+@media (max-width:760px){.ingredient-hero{grid-template-columns:1fr;}}
+.ing-card{border-radius:16px;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;min-height:140px;color:#fff;font-weight:700;font-size:14px;}
+.ing1{background:linear-gradient(160deg,#3B7048,#1F3A2E);}
+.ing2{background:linear-gradient(160deg,#4C8C5B,#2B5136);}
+.ing3{background:linear-gradient(160deg,#EAF3EA,#CFE0D2);color:var(--forest);}
+.tube-lg{border-radius:18px;background:linear-gradient(180deg,#fff,#EEF5EE);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;color:var(--forest);font-size:16px;min-height:140px;}
+
+/* two products */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+@media (max-width:760px){.grid-2{grid-template-columns:1fr;}}
+.product-card{border-radius:18px;padding:34px 28px;min-height:220px;display:flex;flex-direction:column;justify-content:flex-end;}
+.product-card.a{background:var(--mint);}
+.product-card.b{background:linear-gradient(160deg,#1F3A2E,#3B7048);color:#fff;}
+.product-card.b h3, .product-card.b p{color:#fff;}
+.product-card h3{font-size:19px;margin-bottom:6px;font-family:'Inter',sans-serif;font-weight:700;color:var(--forest);}
+.product-card p{font-size:14px;color:#4A5A50;}
+
+/* two links */
+.link-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media (max-width:700px){.link-row{grid-template-columns:1fr;}}
+.link-tile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;align-items:center;gap:14px;
+  text-decoration:none;font-weight:600;color:var(--forest);font-size:15.5px;transition:border-color .2s;}
+.link-tile:hover{border-color:var(--leaf);}
+.link-tile .ic{width:36px;height:36px;border-radius:9px;background:var(--mint-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* 3 step join */
+.join-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.join-step{flex:1;text-align:center;}
+.join-circle{width:48px;height:48px;border-radius:50%;background:var(--forest);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:18px;margin:0 auto 12px;}
+.join-step h3{font-size:14.5px;margin-bottom:5px;font-family:'Inter',sans-serif;font-weight:600;color:var(--forest);}
+.join-step p{font-size:12.5px;color:#5C6A61;max-width:22ch;margin:0 auto;}
+.join-line{flex:0 0 60px;height:1px;background:var(--line);margin-top:-36px;}
+@media (max-width:700px){.join-row{flex-direction:column;}.join-line{display:none;}}
+
+/* faq */
+.faq details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:14px;}
+.faq summary{cursor:pointer;font-weight:600;font-size:15px;color:var(--forest);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::after{content:'+';font-size:20px;color:var(--leaf-dark);}
+.faq details[open] summary::after{content:'–';}
+.faq p{font-size:14px;color:#5C6A61;margin-top:10px;}
+
+/* register */
+.register{background:linear-gradient(150deg,#16281F,#2B5136);border-radius:26px;padding:44px;color:#fff;}
+.register-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:40px;align-items:center;}
+@media (max-width:860px){.register-grid{grid-template-columns:1fr;}.register{padding:30px;}}
+.register h2{color:#fff;font-size:clamp(24px,3vw,32px);margin-bottom:10px;}
+.register p{color:#CFE0D2;font-size:15px;margin-bottom:22px;}
+.form-card{background:#fff;border-radius:18px;padding:28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media (max-width:520px){.form-row{grid-template-columns:1fr;}}
+label{font-size:12.5px;font-weight:600;color:var(--forest);display:block;margin-bottom:6px;}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:14.5px;
+  font-family:inherit;background:#F9FBF8;color:var(--ink);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--leaf);outline-offset:1px;}
+textarea{resize:vertical;min-height:66px;}
+.consent{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:#5C6A61;margin:14px 0 18px;}
+.consent input{width:16px;height:16px;margin-top:1px;}
+.submit-btn{width:100%;background:var(--leaf);color:#fff;border:none;border-radius:100px;padding:14px;font-weight:700;
+  font-size:15px;cursor:pointer;}
+.submit-btn:hover{background:var(--leaf-dark);}
+.form-note{font-size:12px;color:#7A8A80;margin-top:12px;text-align:center;}
+.status-msg{font-size:13.5px;margin-top:12px;text-align:center;font-weight:600;display:none;}
+
+footer{background:var(--forest);color:#CFE0D2;padding:30px 0;}
+.foot-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;font-size:13.5px;}
+.foot-logo{font-family:'Fraunces',serif;font-size:19px;color:#fff;}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav wrap" style="max-width:1120px;padding:16px 0;">
+    <div class="logo">noreva</div>
+    <div class="nav-links">
+      <a href="#noidung">Nội dung</a>
+      <a href="#diengia">Diễn giả</a>
+      <a href="#hoidap">Hỏi đáp</a>
+    </div>
+    <a href="#dangky" class="btn">Đăng ký tham dự →</a>
+  </nav>
+</header>
+
+<!-- 01 HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-tag">NOREVA CLINICAL TALK #01</div>
+      <h1>Giải mã công thức<br>hiệp đồng đa tác động</h1>
+      <p class="hero-sub">Hiểu cơ chế. Kết nối hoạt chất. Ứng dụng vào chăm sóc da mụn.</p>
+      <span class="badge">Chủ đề: Giảm mụn sau 7 ngày</span>
+      <div class="meta-row">
+        <span>🕐 20:30 – 21:30</span>
+        <span>📅 20/08/2026</span>
+        <span>🎥 Zoom</span>
+      </div>
+      <a href="#dangky" class="btn">Đăng ký tham dự →</a>
+    </div>
+    <div class="hero-visual">
+      <div class="products">
+        <div class="tube">ACTIPUR<br>3IN1</div>
+        <div class="pump"></div>
+      </div>
+      <div class="speaker-photo">DS. Trần Thị<br>Thanh Hải</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="sec" id="noidung">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">02</span><h2>Chăm sóc da mụn: cần nhìn đa chiều</h2></div>
+    <div class="grid-3">
+      <div class="skin-card"><div class="skin-photo"></div><div class="body"><h3>Dầu thừa</h3><p>Dễ bít tắc lỗ chân lông, tạo môi trường cho mụn.</p></div></div>
+      <div class="skin-card"><div class="skin-photo"></div><div class="body"><h3>Mụn sưng đỏ</h3><p>Cần được làm dịu và hỗ trợ kiểm soát.</p></div></div>
+      <div class="skin-card"><div class="skin-photo"></div><div class="body"><h3>Thâm sau mụn</h3><p>Ảnh hưởng thẩm mỹ, cần chăm sóc đúng cách.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="sec alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">03</span><h2>Từ hoạt chất đến tư duy phối hợp</h2></div>
+    <div class="grid-3">
+      <div class="step-card"><div class="step-num">01</div><h3>Hiểu cơ chế</h3><p>Tìm hiểu cách hoạt chất tác động trên da mụn.</p></div>
+      <div class="step-card"><div class="step-num">02</div><h3>Chọn vai trò</h3><p>Xác định vai trò của từng sản phẩm trong routine.</p></div>
+      <div class="step-card"><div class="step-num">03</div><h3>Phối hợp chăm sóc</h3><p>Kết nối công thức để tối ưu hiệu quả chăm sóc da.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">04</span><h2>Bạn nhận được gì?</h2></div>
+    <div class="grid-4">
+      <div class="benefit"><div class="ic">📖</div><h3>Hiểu công thức Actipur</h3><p>Cập nhật kiến thức về công thức và thành phần.</p></div>
+      <div class="benefit"><div class="ic">🗂️</div><h3>Phân biệt vai trò sản phẩm</h3><p>Biết cách lựa chọn và phối hợp với tình trạng da.</p></div>
+      <div class="benefit"><div class="ic">💬</div><h3>Gửi câu hỏi cho diễn giả</h3><p>Được giải đáp trực tiếp từ chuyên gia.</p></div>
+      <div class="benefit"><div class="ic">📄</div><h3>Nhận tài liệu hội thảo</h3><p>Tài liệu tổng hợp sau chương trình.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="sec alt" id="diengia">
+  <div class="wrap speaker-feat">
+    <div class="speaker-big"></div>
+    <div>
+      <div class="kicker">ĐỒNG HÀNH CÙNG DIỄN GIẢ</div>
+      <h2>DS. Trần Thị Thanh Hải</h2>
+      <p class="role">Diễn giả Noreva Clinical Talk #01</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">06</span><h2>Những nội dung cùng khám phá</h2></div>
+    <div class="split">
+      <div class="content-list">
+        <div class="row"><span class="n">01</span> Công thức hiệp đồng đa tác động</div>
+        <div class="row"><span class="n">02</span> Actipur 3 in 1 và Actipur Peel</div>
+        <div class="row"><span class="n">03</span> Trao đổi câu hỏi cùng diễn giả</div>
+      </div>
+      <div class="info-card">
+        <h3>60 phút kết nối kiến thức</h3>
+        <p>20:30 – 21:30 · 20/08/2026<br>Trực tuyến qua Zoom</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="sec alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">07</span><h2>Bên trong Actipur 3 in 1</h2></div>
+    <div class="ingredient-hero">
+      <div class="tube-lg">ACTIPUR</div>
+      <div class="grid-3">
+        <div class="ing-card ing1">Keratozine A 5%</div>
+        <div class="ing-card ing2">Phytosphingosine &amp; Bisabolol</div>
+        <div class="ing-card ing3">Microsponges</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">08</span><h2>Hai sản phẩm, vai trò bổ sung</h2></div>
+    <div class="grid-2">
+      <div class="product-card a"><h3>Actipur 3 in 1</h3><p>Chăm sóc da dầu mụn.</p></div>
+      <div class="product-card b"><h3>Actipur Peel</h3><p>Chăm sóc bề mặt da và thâm sau mụn.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="sec alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">09</span><h2>Kết nối kiến thức sau hội thảo</h2></div>
+    <div class="link-row">
+      <a class="link-tile" href="#dangky"><span class="ic">📄</span> Tài liệu hội thảo</a>
+      <a class="link-tile" href="https://zalo.me/g/yfwlrr619" target="_blank" rel="noopener"><span class="ic">👥</span> Nhóm Zalo nhận thông tin</a>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">10</span><h2>Tham gia chỉ với 3 bước</h2></div>
+    <div class="join-row">
+      <div class="join-step"><div class="join-circle">01</div><h3>Điền thông tin</h3><p>Hoàn thành form đăng ký bên dưới.</p></div>
+      <div class="join-line"></div>
+      <div class="join-step"><div class="join-circle">02</div><h3>Vào nhóm Zalo</h3><p>Tham gia nhóm theo hướng dẫn sau khi đăng ký.</p></div>
+      <div class="join-line"></div>
+      <div class="join-step"><div class="join-circle">03</div><h3>Nhận ID Zoom</h3><p>Nhận thông tin tham dự từ ban tổ chức.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="sec alt faq" id="hoidap">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">11</span><h2>Giải đáp trước khi tham gia</h2></div>
+    <details><summary>Hội thảo diễn ra ở đâu?</summary><p>Trực tuyến qua Zoom.</p></details>
+    <details><summary>Nhận ID Zoom bằng cách nào?</summary><p>Vào nhóm Zalo sau khi đăng ký để nhận ID Zoom và tài liệu hội thảo.</p></details>
+    <details><summary>Có thể gửi câu hỏi trước không?</summary><p>Có, qua form đăng ký bên dưới.</p></details>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="sec" id="dangky">
+  <div class="wrap">
+    <div class="register">
+      <div class="register-grid">
+        <div>
+          <h2>Kết nối cùng Noreva Clinical Talk</h2>
+          <p>Đăng ký thông tin và gửi câu hỏi đến diễn giả.</p>
+          <a href="https://zalo.me/g/yfwlrr619" target="_blank" rel="noopener" class="btn ghost" style="border-color:#fff;color:#fff;">Bản mẫu · Cập nhật lịch trước khi mở đăng ký</a>
+        </div>
+        <form class="form-card" id="regForm">
+          <div class="form-row">
+            <div><label for="hoten">Họ và tên *</label><input id="hoten" required placeholder="Nhập họ và tên"></div>
+            <div><label for="sdt">Số điện thoại *</label><input id="sdt" required placeholder="Nhập số điện thoại"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="donvi">Đơn vị công tác *</label><input id="donvi" required placeholder="Nhập đơn vị công tác"></div>
+            <div><label for="chucdanh">Chức danh</label>
+              <select id="chucdanh">
+                <option>Bác sĩ</option><option>Phòng khám</option><option>Spa</option>
+                <option>Đại lý</option><option>Học viên</option><option>Khác</option>
+              </select>
+            </div>
+          </div>
+          <label for="cauhoi">Câu hỏi dành cho diễn giả</label>
+          <textarea id="cauhoi" placeholder="Nhập câu hỏi của bạn..."></textarea>
+          <label class="consent"><input type="checkbox" required> Tôi đồng ý được liên hệ về chương trình.</label>
+          <button type="submit" class="submit-btn">Đăng ký tham dự</button>
+          <p class="status-msg" id="statusMsg"></p>
+          <p class="form-note">Sau khi đăng ký, vui lòng vào nhóm Zalo để nhận ID Zoom và tài liệu hội thảo.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="foot-logo">noreva</div>
+    <div>DMP VIỆT PHÁP &nbsp;|&nbsp; 096 537 33 66 &nbsp;|&nbsp; marketing@dmpvietphap.com &nbsp;|&nbsp; noreva.vn</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('regForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var name = document.getElementById('hoten').value.trim();
+  var phone = document.getElementById('sdt').value.trim();
+  var org = document.getElementById('donvi').value.trim();
+  var role = document.getElementById('chucdanh').value;
+  var question = document.getElementById('cauhoi').value.trim();
+  var subject = encodeURIComponent('Đăng ký Noreva Clinical Talk #01 — ' + name);
+  var body = encodeURIComponent(
+    'Họ và tên: ' + name + '\n' +
+    'Số điện thoại: ' + phone + '\n' +
+    'Đơn vị công tác: ' + org + '\n' +
+    'Chức danh: ' + role + '\n' +
+    'Câu hỏi: ' + (question || '(không có)')
+  );
+  window.location.href = 'mailto:marketing@dmpvietphap.com?subject=' + subject + '&body=' + body;
+  var msg = document.getElementById('statusMsg');
+  msg.style.display = 'block';
+  msg.style.color = '#2B5136';
+  msg.textContent = 'Đã mở email đăng ký — vui lòng bấm Gửi trong ứng dụng email của bạn.';
+});
+</script>
+</body>
+</html>
